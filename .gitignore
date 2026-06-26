@@ -1,0 +1,7 @@
+.env
+/storage/logs/*.log
+!.gitkeep
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/sftp.json

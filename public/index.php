@@ -1,0 +1,13 @@
+<?php
+declare(strict_types=1);
+
+define('BASE_PATH', dirname(__DIR__));
+define('APP_PATH', BASE_PATH . '/app');
+define('CORE_PATH', BASE_PATH . '/core');
+define('CONFIG_PATH', BASE_PATH . '/config');
+define('STORAGE_PATH', BASE_PATH . '/storage');
+
+require CORE_PATH . '/App.php';
+
+$app = new App();
+$app->run();
