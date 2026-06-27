@@ -31,8 +31,8 @@ class App
   public function __construct()
   {
     $this->loadEnv();
-    $this->loadConfig();
     $this->startSession();
+    $this->loadConfig();
     $this->router = new Router();
     $this->registerRoutes();
   }
@@ -68,11 +68,13 @@ class App
     $appConfig = require CONFIG_PATH . '/app.php';
     $dbConfig = require CONFIG_PATH . '/database.php';
     $mailConfig = require CONFIG_PATH . '/mail.php';
+    $domainPricesConfig = require CONFIG_PATH . '/domain-prices.php';
 
     $GLOBALS['config'] = [
       'app' => $appConfig,
       'database' => $dbConfig,
       'mail' => $mailConfig,
+      'domain_prices' => $domainPricesConfig,
     ];
   }
 
@@ -88,6 +90,8 @@ class App
     $this->router->get('/', 'HomeController@index');
     $this->router->get('/projects/{slug}', 'ProjectController@show');
     $this->router->post('/contact', 'ContactController@store');
+    $this->router->get('/check-domain', 'DomainController@index');
+    $this->router->get('/api/v1/check-domain', 'DomainController@check');
 
     $this->router->get('/api/v1/projects', 'ProjectController@apiIndex');
     $this->router->get('/api/v1/projects/{slug}', 'ProjectController@apiShow');

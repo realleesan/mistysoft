@@ -71,6 +71,17 @@ $error = flash('error');
                 </label>
               </div>
             </div>
+            <div class="domain-suggestion" id="domainSuggestion" style="display: none;">
+              <div class="domain-suggestion__content">
+                <p class="domain-suggestion__text">Đã có ý tưởng chọn tên miền?</p>
+                <a href="<?= url('/check-domain') ?>" class="domain-suggestion__link">
+                  Kiểm tra tên miền ngay
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
             <div class="form-navigation">
               <button type="button" class="btn btn--outline form-prev-btn">Quay lại</button>
               <button type="button" class="btn btn--primary form-next-btn">Tiếp tục</button>
@@ -210,3 +221,75 @@ $error = flash('error');
     </div>
   </div>
 </section>
+
+<style>
+.domain-suggestion {
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-radius: var(--radius);
+  border: 1px solid #93c5fd;
+}
+
+.domain-suggestion__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.domain-suggestion__text {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1e40af;
+}
+
+.domain-suggestion__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.domain-suggestion__link:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 640px) {
+  .domain-suggestion__content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .domain-suggestion__link {
+    width: 100%;
+    justify-content: center;
+  }
+}
+</style>
+
+<script>
+(function() {
+  const hostingRadios = document.querySelectorAll('input[name="hosting"]');
+  const domainSuggestion = document.getElementById('domainSuggestion');
+
+  hostingRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      if (this.value === 'no' || this.value === 'need_help') {
+        domainSuggestion.style.display = 'block';
+      } else {
+        domainSuggestion.style.display = 'none';
+      }
+    });
+  });
+})();
+</script>

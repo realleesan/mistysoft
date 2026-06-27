@@ -39,6 +39,7 @@
         <a href="<?= url('/#solutions') ?>" class="nav__link">Giải pháp</a>
         <a href="<?= url('/#portfolio') ?>" class="nav__link">Dự án</a>
         <a href="<?= url('/#pricing') ?>" class="nav__link">Bảng giá</a>
+        <a href="<?= url('/check-domain') ?>" class="nav__link">Kiểm tra tên miền</a>
         <a href="<?= url('/#contact') ?>" class="nav__link nav__link--cta">Liên hệ</a>
       </nav>
       <button class="nav-toggle" id="navToggle" aria-label="Mở menu">
@@ -64,8 +65,8 @@
           </div>
           <div class="footer__contact">
             <p><strong>Hotline:</strong> <?= e(config('app.zalo_phone') ?? '0901234567') ?></p>
-            <p><strong>Email:</strong> contact@mistysoft.vn</p>
-            <p><strong>Địa chỉ:</strong> Hà Nội, Việt Nam</p>
+            <p><strong>Email:</strong> realleesan@gmail.com</p>
+            <p><strong>Địa chỉ:</strong> Phú Diễn, Hà Nội, Việt Nam</p>
           </div>
         </div>
         <div class="footer__links">
@@ -75,6 +76,7 @@
             <li><a href="#services">Dịch vụ</a></li>
             <li><a href="#portfolio">Dự án</a></li>
             <li><a href="#pricing">Bảng giá</a></li>
+            <li><a href="<?= url('/check-domain') ?>">Kiểm tra tên miền</a></li>
             <li><a href="#contact">Liên hệ</a></li>
           </ul>
         </div>
