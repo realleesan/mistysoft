@@ -1,28 +1,74 @@
 <?php
 $problems = $content['problems']['content'] ?? [];
 $items = $problems['items'] ?? [];
-$iconMap = [
-  'old' => '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
-  'traffic' => '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 5 5-9"/></svg>',
-  'trust' => '<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
-];
+$image = $content['problems']['image'] ?? '';
 ?>
 
 <section class="section section--alt" id="problems">
   <div class="container">
     <div class="section__header">
-      <h2 class="section__title"><?= e($problems['section_title'] ?? 'Bạn đang gặp phải vấn đề này?') ?></h2>
+      <h2 class="section__title"><?= e($problems['section_title'] ?? 'Tại sao bạn nên thiết kế website tại MistySoft?') ?></h2>
+      <?php if (!empty($problems['section_subtitle'])): ?>
+        <p class="section__subtitle"><?= e($problems['section_subtitle']) ?></p>
+      <?php endif; ?>
     </div>
-    <div class="grid grid--3">
-      <?php foreach ($items as $item): ?>
-        <article class="card card--problem">
-          <div class="card__icon card__icon--problem">
-            <?= $iconMap[$item['icon'] ?? ''] ?? $iconMap['old'] ?>
+    <div class="split-section split-section--image-left">
+      <div class="split-section__image">
+        <?php if (!empty($image)): ?>
+          <img src="<?= asset('assets/images/resources/' . $image) ?>" alt="<?= e($problems['section_title'] ?? '') ?>" loading="lazy">
+        <?php else: ?>
+          <div class="split-section__placeholder">
+            <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
           </div>
-          <h3 class="card__title"><?= e($item['title'] ?? '') ?></h3>
-          <p class="card__text"><?= e($item['description'] ?? '') ?></p>
-        </article>
-      <?php endforeach; ?>
+        <?php endif; ?>
+      </div>
+      <div class="split-section__content">
+        <div class="accordion">
+          <?php foreach ($items as $index => $item): ?>
+            <div class="accordion__item">
+              <button class="accordion__header" aria-expanded="false" data-accordion="problem-<?= $index ?>">
+                <span class="accordion__title"><?= e($item['title'] ?? '') ?></span>
+                <svg class="accordion__icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion__content" id="problem-<?= $index ?>">
+                <div class="accordion__body">
+                  <?php if (!empty($item['answer'])): ?>
+                    <p class="accordion__answer"><?= e($item['answer']) ?></p>
+                  <?php endif; ?>
+                </div>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+<script>
+(function() {
+  const problemsSection = document.getElementById('problems');
+  if (!problemsSection) return;
+  
+  problemsSection.querySelectorAll('[data-accordion]').forEach(button => {
+    button.addEventListener('click', function() {
+      const targetId = this.getAttribute('data-accordion');
+      const content = document.getElementById(targetId);
+      const isExpanded = this.getAttribute('aria-expanded') === 'true';
+      
+      // Close all other accordions in this section
+      problemsSection.querySelectorAll('[data-accordion]').forEach(otherBtn => {
+        if (otherBtn !== this) {
+          otherBtn.setAttribute('aria-expanded', 'false');
+          const otherContent = document.getElementById(otherBtn.getAttribute('data-accordion'));
+          otherContent.style.maxHeight = null;
+        }
+      });
+      
+      // Toggle current accordion
+      this.setAttribute('aria-expanded', !isExpanded);
+      content.style.maxHeight = !isExpanded ? content.scrollHeight + 'px' : null;
+    });
+  });
+})();
+</script>

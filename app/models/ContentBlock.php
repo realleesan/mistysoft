@@ -6,7 +6,7 @@ class ContentBlock extends BaseModel
   public static function getActiveBlocks(): array
   {
     $stmt = self::db()->query(
-      'SELECT block_key, title, content FROM content_blocks WHERE is_active = 1'
+      'SELECT block_key, title, content, image FROM content_blocks WHERE is_active = 1'
     );
 
     $blocks = [];
@@ -14,6 +14,7 @@ class ContentBlock extends BaseModel
       $blocks[$row['block_key']] = [
         'title' => $row['title'],
         'content' => self::decodeJson($row['content']),
+        'image' => $row['image'] ?? '',
       ];
     }
 
