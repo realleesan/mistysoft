@@ -88,6 +88,7 @@ class App
   private function registerRoutes(): void
   {
     $this->router->get('/', 'HomeController@index');
+    $this->router->get('/coming-soon', 'HomeController@comingSoon');
     $this->router->get('/projects/{slug}', 'ProjectController@show');
     $this->router->post('/contact', 'ContactController@store');
     $this->router->get('/check-domain', 'DomainController@index');

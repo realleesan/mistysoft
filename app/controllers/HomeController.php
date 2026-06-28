@@ -14,11 +14,19 @@ class HomeController extends Controller
     $pricing = PricingPlan::getActive();
 
     $this->view('home/index', [
-      'title' => 'MistySoft - Thiết kế website chuyên nghiệp',
-      'description' => 'MistySoft thiết kế website chuyên nghiệp, tối ưu chuyển đổi cho doanh nghiệp. Landing page, website doanh nghiệp, bảng giá minh bạch.',
+      'title' => 'MistySoft - Digital Solutions for Your Business',
+      'description' => 'MistySoft cung cấp giải pháp digital toàn diện: thiết kế website, app, tool, phần mềm theo yêu cầu, SaaS products, và các dịch vụ hỗ trợ.',
       'content' => $content,
       'projects' => $projects,
       'pricing' => $pricing,
     ]);
+  }
+
+  public function comingSoon(): void
+  {
+    $this->view('errors/coming-soon', [
+      'title' => 'Sắp ra mắt - MistySoft',
+      'description' => 'Tính năng này đang được phát triển và sẽ sớm ra mắt.',
+    ], 'main');
   }
 }

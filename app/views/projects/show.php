@@ -24,18 +24,7 @@
         <p><?= nl2br(e($project['description'] ?? '')) ?></p>
       </div>
 
-      <?php if (!empty($project['images'])): ?>
-        <div class="project-detail__gallery">
-          <h2>Hình ảnh dự án</h2>
-          <div class="gallery">
-            <?php foreach ($project['images'] as $image): ?>
-              <div class="gallery__item">
-                <img src="<?= asset($image) ?>" alt="<?= e($project['title']) ?>" loading="lazy">
-              </div>
-            <?php endforeach; ?>
-          </div>
-        </div>
-      <?php endif; ?>
+      
 
       <div class="project-detail__cta">
         <h2>Bạn cũng muốn có website như thế này?</h2>

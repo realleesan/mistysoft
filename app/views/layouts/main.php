@@ -35,12 +35,52 @@
         </div>
       </a>
       <nav class="nav" id="nav">
-        <a href="<?= url('/#problems') ?>" class="nav__link">Vấn đề</a>
-        <a href="<?= url('/#solutions') ?>" class="nav__link">Giải pháp</a>
-        <a href="<?= url('/#portfolio') ?>" class="nav__link">Dự án</a>
-        <a href="<?= url('/#pricing') ?>" class="nav__link">Bảng giá</a>
-        <a href="<?= url('/check-domain') ?>" class="nav__link">Kiểm tra tên miền</a>
-        <a href="<?= url('/#contact') ?>" class="nav__link nav__link--cta">Liên hệ</a>
+        <a href="<?= url('/') ?>" class="nav__link">Trang chủ</a>
+
+        <div class="nav__dropdown">
+          <a href="<?= url('/coming-soon') ?>" class="nav__link nav__link--dropdown">
+            Dịch vụ
+            <svg class="nav__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </a>
+          <div class="nav__mega-menu">
+            <div class="nav__mega-column">
+              <h4 class="nav__mega-heading">Custom Development</h4>
+              <ul class="nav__mega-list">
+                <li><a href="<?= url('/coming-soon') ?>">Thiết kế Website</a></li>
+                <li><a href="<?= url('/coming-soon') ?>">Thiết kế App</a></li>
+                <li><a href="<?= url('/coming-soon') ?>">Thiết kế Tool</a></li>
+                <li><a href="<?= url('/coming-soon') ?>">Thiết kế Phần mềm</a></li>
+              </ul>
+            </div>
+            <div class="nav__mega-column">
+              <h4 class="nav__mega-heading">Dịch vụ khác</h4>
+              <ul class="nav__mega-list">
+                <li><a href="<?= url('/coming-soon') ?>">Thuê Website</a></li>
+                <li><a href="<?= url('/coming-soon') ?>">Bảo trì & SEO</a></li>
+                <li><a href="<?= url('/coming-soon') ?>">Domain & Hosting</a></li>
+                <li><a href="<?= url('/check-domain') ?>">Kiểm tra tên miền</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav__dropdown">
+          <a href="<?= url('/coming-soon') ?>" class="nav__link nav__link--dropdown">
+            SaaS
+            <svg class="nav__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </a>
+          <div class="nav__dropdown-menu">
+            <a href="<?= url('/coming-soon') ?>">Tất cả SaaS</a>
+            <a href="https://saas.mistysoft.com" target="_blank" rel="noopener">Google Form Tool ↗</a>
+          </div>
+        </div>
+
+        <a href="<?= url('/projects') ?>" class="nav__link">Dự án</a>
+        <a href="<?= url('/contact') ?>" class="nav__link nav__link--cta">Liên hệ</a>
       </nav>
       <button class="nav-toggle" id="navToggle" aria-label="Mở menu">
         <span></span><span></span><span></span>
@@ -68,24 +108,44 @@
             <p><strong>Email:</strong> realleesan@gmail.com</p>
             <p><strong>Địa chỉ:</strong> Phú Diễn, Hà Nội, Việt Nam</p>
           </div>
+          <div class="footer__social">
+            <a href="<?= e(config('app.messenger_url')) ?>" target="_blank" rel="noopener" aria-label="Messenger" class="footer__social-icon footer__social-icon--messenger">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12c0 2.04.54 3.93 1.48 5.59L2 22l4.54-1.36A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.85 0-3.55-.63-4.9-1.69l-.35-.27-3.62 1.09 1.09-3.52-.28-.35A7.95 7.95 0 014 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/></svg>
+            </a>
+            <a href="<?= e(config('app.zalo_url')) ?>" target="_blank" rel="noopener" aria-label="Zalo" class="footer__social-icon footer__social-icon--zalo">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M12 2C6.48 2 2 6.25 2 11.5c0 2.89 1.45 5.46 3.72 7.13L5 22l3.78-1.96C9.73 20.65 10.84 21 12 21c5.52 0 10-4.25 10-9.5S17.52 2 12 2z"/></svg>
+            </a>
+            <a href="https://facebook.com/mistysoft" target="_blank" rel="noopener" aria-label="Facebook" class="footer__social-icon footer__social-icon--facebook">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+          </div>
         </div>
         <div class="footer__links">
-          <h4 class="footer__heading">Liên kết nhanh</h4>
+          <h4 class="footer__heading">Dịch vụ</h4>
           <ul class="footer__list">
-            <li><a href="#hero">Trang chủ</a></li>
-            <li><a href="#services">Dịch vụ</a></li>
-            <li><a href="#portfolio">Dự án</a></li>
-            <li><a href="#pricing">Bảng giá</a></li>
-            <li><a href="<?= url('/check-domain') ?>">Kiểm tra tên miền</a></li>
-            <li><a href="#contact">Liên hệ</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Thiết kế Website</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Thiết kế App</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Thiết kế Tool</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Thuê Website</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Bảo trì & SEO</a></li>
           </ul>
         </div>
         <div class="footer__links">
-          <h4 class="footer__heading">Kết nối</h4>
+          <h4 class="footer__heading">SaaS & Products</h4>
           <ul class="footer__list">
-            <li><a href="<?= e(config('app.messenger_url')) ?>" target="_blank" rel="noopener">Messenger</a></li>
-            <li><a href="<?= e(config('app.zalo_url')) ?>" target="_blank" rel="noopener">Zalo</a></li>
-            <li><a href="https://facebook.com/mistysoft" target="_blank" rel="noopener">Facebook</a></li>
+            <li><a href="https://saas.mistysoft.com" target="_blank" rel="noopener">Google Form Tool ↗</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Cửa hàng số</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">App Showcase</a></li>
+          </ul>
+        </div>
+        <div class="footer__links">
+          <h4 class="footer__heading">Thông tin</h4>
+          <ul class="footer__list">
+            <li><a href="<?= url('/projects') ?>">Dự án</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Ngành nghề</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Blog</a></li>
+            <li><a href="<?= url('/coming-soon') ?>">Về chúng tôi</a></li>
+            <li><a href="<?= url('/contact') ?>">Liên hệ</a></li>
           </ul>
         </div>
       </div>
