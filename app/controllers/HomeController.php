@@ -29,4 +29,17 @@ class HomeController extends Controller
       'description' => 'Tính năng này đang được phát triển và sẽ sớm ra mắt.',
     ], 'main');
   }
+
+  public function ecosystem(): void
+  {
+    $content = ContentBlock::getActiveBlocks();
+    $projects = Project::getFeatured(6);
+
+    $this->view('ecosystem/index', [
+      'title' => 'Digital Solutions Ecosystem - MistySoft',
+      'description' => 'MistySoft Digital Solutions Ecosystem: Website, App, Tool, SaaS Products - Mọi thứ bạn cần để digital hóa doanh nghiệp.',
+      'content' => $content,
+      'projects' => $projects,
+    ], 'main');
+  }
 }
