@@ -98,6 +98,11 @@ class App
     $this->router->get('/api/v1/projects', 'ProjectController@apiIndex');
     $this->router->get('/api/v1/projects/{slug}', 'ProjectController@apiShow');
     $this->router->post('/api/v1/contact', 'ContactController@apiStore');
+
+    // Document routes
+    $this->router->get('/document', 'DocumentController@index');
+    $this->router->get('/api/v1/document/stream', 'DocumentController@stream');
+    $this->router->post('/api/v1/document/report-violation', 'DocumentController@reportViolation');
   }
 
   public function run(): void
