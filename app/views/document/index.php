@@ -799,6 +799,14 @@
               <span class="step-desc">Kế hoạch kiểm thử chấp nhận</span>
             </div>
           </div>
+
+          <div class="step-item" data-doc="contract" id="step-contract">
+            <div class="step-badge">5</div>
+            <div class="step-content">
+              <span class="step-title">05. Contract</span>
+              <span class="step-desc">Hợp đồng dịch vụ phát triển phần mềm</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -908,7 +916,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'contract'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;

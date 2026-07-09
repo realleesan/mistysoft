@@ -8,6 +8,7 @@ class DocumentController extends Controller
     'srs' => 'SRS_LMS_KOREAN_MS_B_2026_V1.0.pdf',
     'qna' => 'QNA_LMS_KOREAN_MS_B_2026_V1.0.pdf',
     'ats' => 'ATS_LMS_KOREAN_MS_B_2026_V1.0.pdf',
+    'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V1.0.pdf',
   ];
 
   private function getBlockedDevicesPath(): string
