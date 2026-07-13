@@ -800,10 +800,18 @@
             </div>
           </div>
 
-          <div class="step-item" data-doc="contract" id="step-contract">
+          <div class="step-item" data-doc="payment" id="step-payment">
             <div class="step-badge">5</div>
             <div class="step-content">
-              <span class="step-title">05. Contract</span>
+              <span class="step-title">05. Payment</span>
+              <span class="step-desc">Báo cáo và phân tích cổng thanh toán quốc tế</span>
+            </div>
+          </div>
+
+          <div class="step-item" data-doc="contract" id="step-contract">
+            <div class="step-badge">6</div>
+            <div class="step-content">
+              <span class="step-title">06. Contract</span>
               <span class="step-desc">Hợp đồng dịch vụ phát triển phần mềm</span>
             </div>
           </div>
@@ -916,7 +924,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'contract'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;

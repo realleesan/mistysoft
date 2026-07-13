@@ -5,10 +5,11 @@ class DocumentController extends Controller
 {
   private const DOCS = [
     'proposal' => 'PROPOSAL_LMS_KOREAN_MS_B_2026_V1.0.pdf',
-    'srs' => 'SRS_LMS_KOREAN_MS_B_2026_V1.0.pdf',
-    'qna' => 'QNA_LMS_KOREAN_MS_B_2026_V1.0.pdf',
-    'ats' => 'ATS_LMS_KOREAN_MS_B_2026_V1.0.pdf',
-    'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V1.0.pdf',
+    'srs' => 'SRS_LMS_KOREAN_MS_B_2026_V2.0.pdf',
+    'qna' => 'QNA_LMS_KOREAN_MS_B_2026_V2.1.pdf',
+    'ats' => 'ATS_LMS_KOREAN_MS_B_2026_V2.0.pdf',
+    'payment' => 'PAYMENT_LMS_KOREAN_MS_B_2026_V1.1.pdf',
+    'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V2.4.pdf',
   ];
 
   private function getBlockedDevicesPath(): string
