@@ -1,20 +1,15 @@
 <?php
 declare(strict_types=1);
 
-class DocumentController extends Controller
+class DocumentQbooksEdtechController extends Controller
 {
   private const DOCS = [
-    'proposal' => 'PROPOSAL_LMS_KOREAN_MS_B_2026_V1.0.pdf',
-    'srs' => 'SRS_LMS_KOREAN_MS_B_2026_V4.2.pdf',
-    'qna' => 'QNA_LMS_KOREAN_MS_B_2026_V4.1.pdf',
-    'ats' => 'ATS_LMS_KOREAN_MS_B_2026_V4.1.pdf',
-    'payment' => 'PAYMENT_LMS_KOREAN_MS_B_2026_V1.1.pdf',
-    'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V4.1.pdf',
+    'qna' => 'QNA_LMS_QBOOKS_MS_B_2026_V1.0 .pdf',
   ];
 
   private function getBlockedDevicesPath(): string
   {
-    return STORAGE_PATH . '/logs/blocked_devices.json';
+    return STORAGE_PATH . '/logs/blocked_devices_qbooks_edtech.json';
   }
 
   private function isBlocked(): bool
@@ -56,7 +51,7 @@ class DocumentController extends Controller
   {
     if ($this->isBlocked()) {
       $remaining = $this->getBlockRemainingTime();
-      $this->view('document/blocked', [
+      $this->view('document-qbooks-edtech/blocked', [
         'title' => 'Truy cập bị hạn chế - MistySoft',
         'remaining' => $remaining,
         'ip' => $this->getClientIp()
@@ -64,8 +59,8 @@ class DocumentController extends Controller
       return;
     }
 
-    $this->view('document/index', [
-      'title' => 'Tài liệu dự án - MistySoft',
+    $this->view('document-qbooks-edtech/index', [
+      'title' => 'Tài liệu dự án QBooks EdTech - MistySoft',
       'ip' => $this->getClientIp()
     ], null);
   }
@@ -86,7 +81,7 @@ class DocumentController extends Controller
     }
 
     $fileName = self::DOCS[$docKey];
-    $filePath = APP_PATH . '/views/document/' . $fileName;
+    $filePath = APP_PATH . '/views/document-qbooks-edtech/' . $fileName;
 
     if (!file_exists($filePath)) {
       http_response_code(404);
@@ -101,7 +96,7 @@ class DocumentController extends Controller
     header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
     header('Expires: 0');
-    
+
     // Prevent iframe embedding elsewhere (optional security measure, standard is DENY or SAMEORIGIN)
     header('X-Frame-Options: SAMEORIGIN');
     header('X-Content-Type-Options: nosniff');
