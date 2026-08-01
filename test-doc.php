@@ -70,6 +70,7 @@ $GLOBALS['config'] = [
 if (isset($_GET['test_stream']) && $_GET['test_stream'] === '1') {
     header('Content-Type: text/plain; charset=utf-8');
     try {
+        require_once CORE_PATH . '/App.php';
         $_GET['doc'] = 'proposal';
         $controller = new DocumentController();
         $controller->stream();
