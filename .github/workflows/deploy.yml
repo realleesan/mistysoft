@@ -22,7 +22,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ./htdocs/
+          server-dir: ./mistydev.id.vn/htdocs/
           local-dir: ./
           # --- CÁC THAM SỐ TỐI ƯU THÊM VÀO ---
           protocol: ftp
