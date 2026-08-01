@@ -13,6 +13,7 @@ class DocumentController extends Controller
     'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V6.0.pdf',
     'config' => 'CONFIG_LMS_KOREAN_MS_B_2026_V1.0.pdf',
     'email' => 'EMAIL_LMS_KOREAN_MS_B_2026_V1.3.pdf',
+    'cr-01' => 'CR-01_LMS_KOREAN_MS_B_2026_V1.0.pdf',
   ];
 
   private function getBlockedDevicesPath(): string
