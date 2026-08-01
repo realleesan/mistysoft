@@ -3,3 +3,4 @@
 .gitignore
 README.md
 *.sql
+node_modules/
