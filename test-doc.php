@@ -115,6 +115,27 @@ if (is_dir($logDir)) {
     echo "<p style='color: red;'>Log directory does not exist: $logDir</p>";
 }
 
+// Check if .env exists
+$envFile = BASE_PATH . '/.env';
+echo "<h3>Checking .env file</h3>";
+if (file_exists($envFile)) {
+    echo "<p style='color: green;'>.env file exists!</p>";
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    echo "<ul>";
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) continue;
+        if (!str_contains($line, '=')) continue;
+        [$key, $value] = explode('=', $line, 2);
+        $key = trim($key);
+        $displayVal = (str_contains(strtolower($key), 'password') || str_contains(strtolower($key), 'key')) ? '********' : $value;
+        echo "<li><strong>$key</strong>: $displayVal</li>";
+    }
+    echo "</ul>";
+} else {
+    echo "<p style='color: red;'>.env file does NOT exist in " . BASE_PATH . "!</p>";
+}
+
 // Check files in app/views/document/
 $docDir = APP_PATH . '/views/document';
 echo "<h3>Checking Directory: $docDir</h3>";
