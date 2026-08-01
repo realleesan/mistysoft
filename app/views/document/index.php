@@ -815,6 +815,22 @@
               <span class="step-desc">Hợp đồng dịch vụ phát triển phần mềm</span>
             </div>
           </div>
+
+          <div class="step-item" data-doc="config" id="step-config">
+            <div class="step-badge">7</div>
+            <div class="step-content">
+              <span class="step-title">07. Config</span>
+              <span class="step-desc">Hướng dẫn cấu hình hệ thống</span>
+            </div>
+          </div>
+
+          <div class="step-item" data-doc="email" id="step-email">
+            <div class="step-badge">8</div>
+            <div class="step-content">
+              <span class="step-title">08. Email</span>
+              <span class="step-desc">Hướng dẫn cấu hình email</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -924,7 +940,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;

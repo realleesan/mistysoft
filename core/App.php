@@ -108,6 +108,18 @@ class App
     $this->router->get('/document-qbooks-edtech', 'DocumentQbooksEdtechController@index');
     $this->router->get('/api/v1/document-qbooks-edtech/stream', 'DocumentQbooksEdtechController@stream');
     $this->router->post('/api/v1/document-qbooks-edtech/report-violation', 'DocumentQbooksEdtechController@reportViolation');
+
+    // Interview routes
+    $this->router->get('/interview', 'InterviewController@index');
+    $this->router->post('/interview/enter', 'InterviewController@enter');
+    $this->router->post('/interview/submit', 'InterviewController@submit');
+    $this->router->post('/api/v1/interview/report-violation', 'InterviewController@reportViolation');
+    $this->router->get('/interview/admin', 'InterviewController@admin');
+    $this->router->post('/interview/admin/create-question', 'InterviewController@createQuestion');
+    $this->router->post('/interview/admin/update-question', 'InterviewController@updateQuestion');
+    $this->router->post('/interview/admin/delete-question', 'InterviewController@deleteQuestion');
+    $this->router->post('/interview/admin/generate', 'InterviewController@generateTenantId');
+    $this->router->post('/interview/admin/delete-tenant', 'InterviewController@deleteTenantId');
   }
 
   public function run(): void

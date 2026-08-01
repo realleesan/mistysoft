@@ -1,0 +1,17 @@
+[
+  {
+    "id": "q_einstein",
+    "title": "Đề A: Bài toán 5 ngôi nhà (Einstein Riddle)",
+    "description": "Có 5 ngôi nhà, mỗi ngôi nhà được sơn một màu khác nhau. Chủ nhân của mỗi ngôi nhà có quốc tịch khác nhau. Mỗi người thích một loại đồ uống, hút một nhãn hiệu thuốc lá và nuôi một loại thú cưng riêng biệt. Hãy xác định ai là người nuôi cá dựa trên các dữ kiện sau:\n\n1. Người Anh sống trong ngôi nhà màu đỏ.\n2. Người Thụy Điển nuôi chó làm cảnh.\n3. Người Đan Mạch thích uống trà.\n4. Ngôi nhà màu xanh lá cây nằm bên trái ngôi nhà màu trắng.\n5. Chủ nhà xanh lá cây thích uống cà phê.\n6. Người hút thuốc Pall Mall nuôi chim.\n7. Chủ nhà màu vàng hút thuốc Dunhill.\n8. Người sống trong ngôi nhà ở giữa thích uống sữa.\n9. Người Na Uy sống ở ngôi nhà đầu tiên.\n10. Người hút thuốc Blend sống cạnh người nuôi mèo.\n11. Người nuôi ngựa sống cạnh người hút Dunhill.\n12. Người hút thuốc Blue Master thích uống bia.\n13. Người Đức hút thuốc Prince.\n14. Người Na Uy sống cạnh ngôi nhà màu xanh lam.\n15. Người hút thuốc Blend có người hàng xóm thích uống nước lọc."
+  },
+  {
+    "id": "q_camel",
+    "title": "Đề B: Lạc đà vận chuyển chuối",
+    "description": "Một người nông dân có 3000 quả chuối ở giữa sa mạc và muốn vận chuyển chúng đến một thị trường cách đó 1000 dặm. Anh ta chỉ có một con lạc đà để chở chuối. Con lạc đà này có các quy tắc sau:\n- Nó chỉ có thể chở tối đa 1000 quả chuối một lúc.\n- Nó phải ăn 1 quả chuối cho mỗi dặm đi được (cả lượt đi lẫn lượt về).\n\nHỏi số quả chuối tối đa mà người nông dân có thể mang đến thị trường là bao nhiêu? Hãy giải thích chi tiết phương án vận chuyển."
+  },
+  {
+    "id": "q_bridge",
+    "title": "Đề C: Đi qua cầu trong đêm",
+    "description": "Có 4 người cần đi qua một chiếc cầu ọp ẹp trong đêm tối. Họ chỉ có duy nhất một cây đuốc và cây đuốc này chỉ cháy được trong 60 phút nữa. Cây cầu rất yếu nên tối đa chỉ có 2 người được đi cùng một lúc. Do đi trong đêm, bất kỳ nhóm nào đi qua (dù 1 hay 2 người) đều phải cầm đuốc. Mỗi người có tốc độ đi qua cầu khác nhau:\n- Người A: đi mất 5 phút.\n- Người B: đi mất 10 phút.\n- Người C: đi mất 20 phút.\n- Người D: đi mất 25 phút.\n(Khi 2 người đi cùng nhau, họ sẽ đi với tốc độ của người đi chậm hơn).\n\nHỏi làm thế nào để cả 4 người đi qua cầu an toàn trong vòng 60 phút?"
+  }
+]

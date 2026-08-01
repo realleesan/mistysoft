@@ -1,0 +1,23 @@
+[
+  {
+    "tenant_id": "xyz123",
+    "question_id": "q_einstein",
+    "is_used": false,
+    "created_at": 1721404800,
+    "used_at": null
+  },
+  {
+    "tenant_id": "abc456",
+    "question_id": "q_camel",
+    "is_used": false,
+    "created_at": 1721404800,
+    "used_at": null
+  },
+  {
+    "tenant_id": "test789",
+    "question_id": "q_bridge",
+    "is_used": false,
+    "created_at": 1721404800,
+    "used_at": null
+  }
+]
