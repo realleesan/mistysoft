@@ -1105,19 +1105,22 @@
         updateNavigationButtons();
         
         // Call secure API stream
-        const url = `/api/v1/document-qbooks-edtech/stream?doc=${docKey}`;
+        const url = `/api/v1/document-qbooks-edtech/load?doc=${docKey}`;
 
         fetch(url)
           .then(res => {
             if (!res.ok) {
               throw new Error(`HTTP error! status: ${res.status}`);
             }
-            return res.text();
+            return res.json();
           })
-          .then(base64Data => {
+          .then(json => {
             if (thisSessionId !== renderSessionId) return;
+            if (!json || !json.pdf) {
+              throw new Error('Invalid JSON response or missing PDF data.');
+            }
 
-            const binaryString = window.atob(base64Data.trim());
+            const binaryString = window.atob(json.pdf.trim());
             const len = binaryString.length;
             const bytes = new Uint8Array(len);
             for (let i = 0; i < len; i++) {

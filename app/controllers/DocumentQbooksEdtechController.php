@@ -96,23 +96,13 @@ class DocumentQbooksEdtechController extends Controller
 
     $content = @file_get_contents($filePath);
     if ($content === false) {
-      http_response_code(500);
-      echo 'Failed to read document file.';
-      exit;
+      json_response(['error' => 'Failed to read document file'], 500);
     }
 
     $base64 = base64_encode($content);
 
-    // Stream the base64 content as plain text to bypass InfinityFree security blocks on PDF binaries
-    header('Content-Type: text/plain; charset=utf-8');
-    header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
-    header('Pragma: no-cache');
-    header('Expires: 0');
-    header('X-Frame-Options: SAMEORIGIN');
-    header('X-Content-Type-Options: nosniff');
-
-    echo $base64;
-    exit;
+    // Stream the base64 content inside a standard JSON response to bypass security blocks on raw/plain binaries
+    json_response(['pdf' => $base64]);
   }
 
   public function reportViolation(): void
