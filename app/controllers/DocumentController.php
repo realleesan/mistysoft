@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+// Force deploy sync
 class DocumentController extends Controller
 {
   private const DOCS = [
