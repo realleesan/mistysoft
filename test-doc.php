@@ -72,6 +72,8 @@ if (isset($_GET['simulate']) && $_GET['simulate'] === '1') {
     ob_start();
     register_shutdown_function(function() {
         $output = ob_get_clean();
+        header_remove();
+        header('Content-Type: text/html; charset=utf-8');
         $len = strlen($output);
         $firstBytes = substr($output, 0, 300);
         $headers = headers_list();
