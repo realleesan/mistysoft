@@ -67,18 +67,68 @@ $GLOBALS['config'] = [
     'domain_prices' => $domainPricesConfig,
 ];
 
-echo "<h2>Testing DocumentController::index()</h2>";
+echo "<h2>System Diagnostic & PDF File Checks</h2>";
 
+// Check files in app/views/document/
+$docDir = APP_PATH . '/views/document';
+echo "<h3>Checking Directory: $docDir</h3>";
+if (!is_dir($docDir)) {
+    echo "<p style='color: red;'>Directory does not exist!</p>";
+} else {
+    echo "<p style='color: green;'>Directory exists.</p>";
+    $files = scandir($docDir);
+    echo "<ul>";
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') continue;
+        $path = $docDir . '/' . $file;
+        $isPDF = str_ends_with(strtolower($file), '.pdf');
+        $size = filesize($path);
+        $readable = is_readable($path) ? "Yes" : "No";
+        $color = $isPDF ? "blue" : "black";
+        echo "<li><strong style='color: $color;'>$file</strong> - Size: $size bytes, Readable: $readable</li>";
+    }
+    echo "</ul>";
+}
+
+// Test DocumentController::DOCS mapping
+echo "<h3>Checking DocumentController::DOCS Mapping</h3>";
 try {
-    $controller = new DocumentController();
-    $controller->index();
-    echo "<p style='color: green;'>Success! Controller index executed without throwing exceptions.</p>";
+    $reflection = new ReflectionClass('DocumentController');
+    $docs = $reflection->getConstant('DOCS');
+    echo "<ul>";
+    foreach ($docs as $key => $fileName) {
+        $path = $docDir . '/' . $fileName;
+        if (file_exists($path)) {
+            echo "<li><span style='color: green;'>✔</span> <strong>$key</strong> maps to <strong>$fileName</strong> (Exists, Size: " . filesize($path) . " bytes)</li>";
+        } else {
+            echo "<li><span style='color: red;'>✘</span> <strong>$key</strong> maps to <strong>$fileName</strong> (DOES NOT EXIST AT PATH: $path)</li>";
+        }
+    }
+    echo "</ul>";
 } catch (\Throwable $e) {
-    echo "<h3 style='color: red;'>Exception Caught:</h3>";
-    echo "<pre>";
-    echo "Message: " . $e->getMessage() . "\n";
-    echo "File: " . $e->getFile() . "\n";
-    echo "Line: " . $e->getLine() . "\n";
-    echo "Trace:\n" . $e->getTraceAsString();
-    echo "</pre>";
+    echo "<p style='color: red;'>Failed to check constant DOCS: " . $e->getMessage() . "</p>";
+}
+
+// Test Stream Action
+echo "<h3>Simulating stream() call for 'proposal'</h3>";
+try {
+    $_GET['doc'] = 'proposal';
+    $controller = new DocumentController();
+    
+    // Capture headers and output
+    ob_start();
+    // Temporarily disable exit in controller or wrap it
+    // Since readfile writes to output, let's see if we can read first 100 bytes of proposal
+    $proposalFile = $docDir . '/' . $docs['proposal'];
+    if (file_exists($proposalFile)) {
+        $handle = fopen($proposalFile, 'rb');
+        $chunk = fread($handle, 100);
+        fclose($handle);
+        echo "<p style='color: green;'>Successfully read first 100 bytes of proposal PDF.</p>";
+        echo "<pre>Header bytes: " . bin2hex($chunk) . "</pre>";
+    } else {
+        echo "<p style='color: red;'>Proposal file does not exist, cannot read.</p>";
+    }
+} catch (\Throwable $e) {
+    echo "<p style='color: red;'>Error simulating stream: " . $e->getMessage() . "</p>";
 }
