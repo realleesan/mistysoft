@@ -832,11 +832,11 @@
             </div>
           </div>
 
-          <div class="step-item" data-doc="cr-01" id="step-cr-01">
+          <div class="step-item" data-doc="cr" id="step-cr">
             <div class="step-badge">9</div>
             <div class="step-content">
-              <span class="step-title">09. CR-01</span>
-              <span class="step-desc">Thỏa thuận nâng cấp CR-01</span>
+              <span class="step-title">09. CR</span>
+              <span class="step-desc">Thỏa thuận nâng cấp</span>
             </div>
           </div>
         </div>
@@ -948,7 +948,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email', 'cr-01'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email', 'cr'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;
@@ -1169,64 +1169,42 @@
         updateNavigationButtons();
         
         // Call secure API stream
-        const url = `/api/v1/document/load?doc=${docKey}`;
+        const url = `/api/v1/document/stream?doc=${docKey}`;
 
-        fetch(url)
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then(json => {
+        pdfjsLib.getDocument({ url: url, withCredentials: true }).promise.then(function(pdf) {
+          if (thisSessionId !== renderSessionId) return;
+
+          pdfDoc = pdf;
+          pageCountSpan.textContent = pdf.numPages;
+          pageNumInput.value = pageNum;
+          
+          // Calculate scale to fit width on initial load
+          pdf.getPage(1).then(function(page) {
             if (thisSessionId !== renderSessionId) return;
-            if (!json || !json.pdf) {
-              throw new Error('Invalid JSON response or missing PDF data.');
-            }
-
-            const binaryString = window.atob(json.pdf.trim());
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
-            }
-
-            return pdfjsLib.getDocument({ data: bytes }).promise;
-          })
-          .then(function(pdf) {
-            if (!pdf || thisSessionId !== renderSessionId) return;
-
-            pdfDoc = pdf;
-            pageCountSpan.textContent = pdf.numPages;
-            pageNumInput.value = pageNum;
             
-            // Calculate scale to fit width on initial load
-            pdf.getPage(1).then(function(page) {
+            const viewportData = page.getViewport({ scale: 1.0 });
+            const viewportWidth = viewport.clientWidth - 48; // padding
+            scale = viewportWidth / viewportData.width;
+            scale = Math.min(Math.max(scale, 0.45), 1.8);
+            zoomPercentSpan.textContent = Math.round(scale * 100) + '%';
+            
+            // Fade out loading
+            loading.style.opacity = '0';
+            setTimeout(() => {
               if (thisSessionId !== renderSessionId) return;
+              loading.style.display = 'none';
+              pagesContainer.style.display = 'flex';
               
-              const viewportData = page.getViewport({ scale: 1.0 });
-              const viewportWidth = viewport.clientWidth - 48; // padding
-              scale = viewportWidth / viewportData.width;
-              scale = Math.min(Math.max(scale, 0.45), 1.8);
-              zoomPercentSpan.textContent = Math.round(scale * 100) + '%';
-              
-              // Fade out loading
-              loading.style.opacity = '0';
-              setTimeout(() => {
-                if (thisSessionId !== renderSessionId) return;
-                loading.style.display = 'none';
-                pagesContainer.style.display = 'flex';
-                
-                // Start rendering pages sequentially
-                renderPages(thisSessionId, 1);
-              }, 300);
-            });
-
-          }).catch(function(error) {
-            console.error(error);
-            loadingTitle.textContent = 'Lỗi tải tài liệu. Vui lòng kiểm tra quyền truy cập.';
-            showToast('Lỗi: Không thể tải file tài liệu từ server.');
+              // Start rendering pages sequentially
+              renderPages(thisSessionId, 1);
+            }, 300);
           });
+
+        }).catch(function(error) {
+          console.error(error);
+          loadingTitle.textContent = 'Lỗi tải tài liệu. Vui lòng kiểm tra quyền truy cập.';
+          showToast('Lỗi: Không thể tải file tài liệu từ server.');
+        });
       }
 
       // 5. Recursive Page Rendering

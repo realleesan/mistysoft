@@ -101,12 +101,12 @@ class App
 
     // Document routes
     $this->router->get('/document', 'DocumentController@index');
-    $this->router->get('/api/v1/document/load', 'DocumentController@stream');
+    $this->router->get('/api/v1/document/stream', 'DocumentController@stream');
     $this->router->post('/api/v1/document/report-violation', 'DocumentController@reportViolation');
 
     // Document QBooks EdTech routes
     $this->router->get('/document-qbooks-edtech', 'DocumentQbooksEdtechController@index');
-    $this->router->get('/api/v1/document-qbooks-edtech/load', 'DocumentQbooksEdtechController@stream');
+    $this->router->get('/api/v1/document-qbooks-edtech/stream', 'DocumentQbooksEdtechController@stream');
     $this->router->post('/api/v1/document-qbooks-edtech/report-violation', 'DocumentQbooksEdtechController@reportViolation');
 
     // Interview routes
