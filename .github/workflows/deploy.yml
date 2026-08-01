@@ -22,11 +22,10 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ./mistydev.id.vn/htdocs/
+          server-dir: mistydev.id.vn/htdocs/
           local-dir: ./
           # --- CÁC THAM SỐ TỐI ƯU THÊM VÀO ---
           protocol: ftp
           port: 21
-          state-name: .ftp-deploy-sync-state.json # File lưu trạng thái commit trên server
-          dangerous-clean-up: false # Không tự ý xóa nhầm file không có trong Git trên hosting
+          state-name: deploy-sync-state.json # Đã đổi tên để tránh tiền tố .ftp bị server chặn
           timeout: 60000 # Tăng thời gian chờ response lên 60 giây để tránh đứt kết nối
