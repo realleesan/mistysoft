@@ -67,6 +67,18 @@ $GLOBALS['config'] = [
     'domain_prices' => $domainPricesConfig,
 ];
 
+if (isset($_GET['test_stream']) && $_GET['test_stream'] === '1') {
+    header('Content-Type: text/plain; charset=utf-8');
+    try {
+        $_GET['doc'] = 'proposal';
+        $controller = new DocumentController();
+        $controller->stream();
+    } catch (\Throwable $e) {
+        echo "Exception caught: " . $e->getMessage() . "\n" . $e->getTraceAsString();
+    }
+    exit;
+}
+
 // Check if simulation mode is requested
 if (isset($_GET['simulate']) && $_GET['simulate'] === '1') {
     ob_start();
