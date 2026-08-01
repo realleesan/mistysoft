@@ -67,7 +67,34 @@ $GLOBALS['config'] = [
     'domain_prices' => $domainPricesConfig,
 ];
 
+// Check if simulation mode is requested
+if (isset($_GET['simulate']) && $_GET['simulate'] === '1') {
+    ob_start();
+    register_shutdown_function(function() {
+        $output = ob_get_clean();
+        $len = strlen($output);
+        $firstBytes = substr($output, 0, 300);
+        $headers = headers_list();
+        
+        echo "<h2>Simulated Stream Route Output</h2>";
+        echo "<p>Response length: $len bytes</p>";
+        echo "<p>Response headers:</p><pre>" . htmlspecialchars(print_r($headers, true)) . "</pre>";
+        echo "<p>First 300 bytes (Hex): " . bin2hex($firstBytes) . "</p>";
+        echo "<p>First 300 bytes (Text representation):</p><pre>" . htmlspecialchars($firstBytes) . "</pre>";
+    });
+
+    $_SERVER['REQUEST_METHOD'] = 'GET';
+    $_SERVER['REQUEST_URI'] = '/api/v1/document/stream';
+    $_GET['doc'] = 'proposal';
+
+    require CORE_PATH . '/App.php';
+    $app = new App();
+    $app->run();
+    exit;
+}
+
 echo "<h2>System Diagnostic & PDF File Checks</h2>";
+echo "<p><a href='?simulate=1' style='font-size: 16px; font-weight: bold; color: blue;'>👉 Click here to simulate internal /api/v1/document/stream route</a></p>";
 
 // Check files in app/views/document/
 $docDir = APP_PATH . '/views/document';
