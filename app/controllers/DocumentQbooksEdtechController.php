@@ -89,19 +89,29 @@ class DocumentQbooksEdtechController extends Controller
       exit;
     }
 
-    // Stream the file with security headers
-    header('Content-Type: application/pdf');
-    header('Content-Disposition: inline; filename="' . $fileName . '"');
-    header('Content-Length: ' . filesize($filePath));
+    // Clear any active output buffers to prevent memory issues or headers mismatch
+    while (ob_get_level() > 0) {
+      ob_end_clean();
+    }
+
+    $content = @file_get_contents($filePath);
+    if ($content === false) {
+      http_response_code(500);
+      echo 'Failed to read document file.';
+      exit;
+    }
+
+    $base64 = base64_encode($content);
+
+    // Stream the base64 content as plain text to bypass InfinityFree security blocks on PDF binaries
+    header('Content-Type: text/plain; charset=utf-8');
     header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
     header('Expires: 0');
-
-    // Prevent iframe embedding elsewhere (optional security measure, standard is DENY or SAMEORIGIN)
     header('X-Frame-Options: SAMEORIGIN');
     header('X-Content-Type-Options: nosniff');
 
-    readfile($filePath);
+    echo $base64;
     exit;
   }
 
