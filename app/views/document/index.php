@@ -832,13 +832,7 @@
             </div>
           </div>
 
-          <div class="step-item" data-doc="cr" id="step-cr">
-            <div class="step-badge">9</div>
-            <div class="step-content">
-              <span class="step-title">09. CR-01</span>
-              <span class="step-desc">Thỏa thuận nâng cấp CR-01</span>
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -948,7 +942,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email', 'cr'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;
