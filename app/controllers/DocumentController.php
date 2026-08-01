@@ -13,7 +13,7 @@ class DocumentController extends Controller
     'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V6.0.pdf',
     'config' => 'CONFIG_LMS_KOREAN_MS_B_2026_V1.0.pdf',
     'email' => 'EMAIL_LMS_KOREAN_MS_B_2026_V1.3.pdf',
-    'cr-01' => 'CR-01_LMS_KOREAN_MS_B_2026_V1.0.pdf',
+    'cr' => 'CR_01_LMS_KOREAN_MS_B_2026_V1.0.pdf',
   ];
 
   private function getBlockedDevicesPath(): string
@@ -98,16 +98,10 @@ class DocumentController extends Controller
       exit;
     }
 
-    // Clear any active output buffers to prevent memory issues or headers mismatch
-    while (ob_get_level() > 0) {
-      ob_end_clean();
-    }
-
     // Stream the file with security headers
     header('Content-Type: application/pdf');
     header('Content-Disposition: inline; filename="' . $fileName . '"');
-    // Disabled Content-Length to prevent hangs due to server-side compression mismatch
-    // header('Content-Length: ' . filesize($filePath));
+    header('Content-Length: ' . filesize($filePath));
     header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
     header('Expires: 0');

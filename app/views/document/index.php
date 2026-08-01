@@ -832,7 +832,7 @@
             </div>
           </div>
 
-          <div class="step-item" data-doc="cr-01" id="step-cr-01">
+          <div class="step-item" data-doc="cr" id="step-cr">
             <div class="step-badge">9</div>
             <div class="step-content">
               <span class="step-title">09. CR-01</span>
@@ -948,7 +948,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email', 'cr-01'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email', 'cr'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;
