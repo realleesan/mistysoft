@@ -10,7 +10,7 @@ class DocumentController extends Controller
     'ats' => 'ATS_LMS_KOREAN_MS_B_2026_V6.0.pdf',
     'payment' => 'PAYMENT_LMS_KOREAN_MS_B_2026_V2.0.pdf',
     'contract' => 'CONTRACT_LMS_KOREAN_MS_B_2026_V6.0.pdf',
-    'config' => 'CONFIG_LMS_KOREAN_MS_B_2026_V1.0.pdf'
+    'config' => 'CONFIG_LMS_KOREAN_MS_B_2026_V1.0.pdf',
     'email' => 'EMAIL_LMS_KOREAN_MS_B_2026_V1.3.pdf'
   ];
 
