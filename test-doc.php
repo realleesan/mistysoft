@@ -98,6 +98,23 @@ if (isset($_GET['simulate']) && $_GET['simulate'] === '1') {
 echo "<h2>System Diagnostic & PDF File Checks</h2>";
 echo "<p><a href='?simulate=1' style='font-size: 16px; font-weight: bold; color: blue;'>👉 Click here to simulate internal /api/v1/document/load route</a></p>";
 
+echo "<h3>System Error Logs</h3>";
+$logDir = STORAGE_PATH . '/logs';
+if (is_dir($logDir)) {
+    $logFiles = glob($logDir . '/*.log');
+    if (empty($logFiles)) {
+        echo "<p style='color: green;'>No log files found.</p>";
+    } else {
+        foreach ($logFiles as $lfPath) {
+            $lf = basename($lfPath);
+            echo "<p><strong>$lf</strong> (" . filesize($lfPath) . " bytes):</p>";
+            echo "<pre style='background: #eee; padding: 10px; border: 1px solid #ccc; max-height: 400px; overflow: auto; text-align: left;'>" . htmlspecialchars(file_get_contents($lfPath)) . "</pre>";
+        }
+    }
+} else {
+    echo "<p style='color: red;'>Log directory does not exist: $logDir</p>";
+}
+
 // Check files in app/views/document/
 $docDir = APP_PATH . '/views/document';
 echo "<h3>Checking Directory: $docDir</h3>";
