@@ -109,16 +109,55 @@ try {
     echo "<p style='color: red;'>Failed to check constant DOCS: " . $e->getMessage() . "</p>";
 }
 
+// Check for BOM/leading whitespace in all included PHP files
+echo "<h3>Checking for BOM or leading whitespace in PHP files</h3>";
+$includedFiles = get_included_files();
+// Proactively check DocumentController since it is the target but might not be included yet
+$targetControllerFile = APP_PATH . '/controllers/DocumentController.php';
+if (file_exists($targetControllerFile) && !in_array($targetControllerFile, $includedFiles)) {
+    $includedFiles[] = $targetControllerFile;
+}
+// Also check index.php (entry points)
+$entryPoints = [BASE_PATH . '/index.php', PUBLIC_PATH . '/index.php'];
+foreach ($entryPoints as $ep) {
+    if (file_exists($ep) && !in_array($ep, $includedFiles)) {
+        $includedFiles[] = $ep;
+    }
+}
+
+$hasIssue = false;
+echo "<ul>";
+foreach ($includedFiles as $file) {
+    if (!file_exists($file)) continue;
+    $content = file_get_contents($file);
+    $displayFile = str_replace(BASE_PATH, "", $file);
+    
+    // Check BOM
+    if (str_starts_with($content, "\xef\xbb\xbf")) {
+        echo "<li style='color: red;'>✘ <strong>$displayFile</strong> has UTF-8 BOM!</li>";
+        $hasIssue = true;
+    }
+    
+    // Check if there is anything before <?php
+    $parts = explode('<?php', $content, 2);
+    if (count($parts) > 1 && $parts[0] !== '') {
+        $pre = str_replace("\xef\xbb\xbf", "", $parts[0]);
+        if ($pre !== '') {
+            echo "<li style='color: red;'>✘ <strong>$displayFile</strong> has characters before &lt;?php (Hex: " . bin2hex($pre) . ")</li>";
+            $hasIssue = true;
+        }
+    }
+}
+if (!$hasIssue) {
+    echo "<li style='color: green;'>✔ No BOM or leading whitespace issues found in loaded files!</li>";
+}
+echo "</ul>";
+
 // Test Stream Action
 echo "<h3>Simulating stream() call for 'proposal'</h3>";
 try {
     $_GET['doc'] = 'proposal';
     $controller = new DocumentController();
-    
-    // Capture headers and output
-    ob_start();
-    // Temporarily disable exit in controller or wrap it
-    // Since readfile writes to output, let's see if we can read first 100 bytes of proposal
     $proposalFile = $docDir . '/' . $docs['proposal'];
     if (file_exists($proposalFile)) {
         $handle = fopen($proposalFile, 'rb');
