@@ -1169,7 +1169,7 @@
         updateNavigationButtons();
         
         // Call secure API stream
-        const url = `/api/v1/document/stream?doc=${docKey}`;
+        const url = `/api/v1/document/load?doc=${docKey}`;
 
         fetch(url)
           .then(res => {

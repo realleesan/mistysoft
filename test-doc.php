@@ -99,7 +99,7 @@ if (isset($_GET['simulate']) && $_GET['simulate'] === '1') {
     });
 
     $_SERVER['REQUEST_METHOD'] = 'GET';
-    $_SERVER['REQUEST_URI'] = '/api/v1/document/stream';
+    $_SERVER['REQUEST_URI'] = '/api/v1/document/load';
     $_GET['doc'] = 'proposal';
 
     require CORE_PATH . '/App.php';
@@ -109,7 +109,7 @@ if (isset($_GET['simulate']) && $_GET['simulate'] === '1') {
 }
 
 echo "<h2>System Diagnostic & PDF File Checks</h2>";
-echo "<p><a href='?simulate=1' style='font-size: 16px; font-weight: bold; color: blue;'>👉 Click here to simulate internal /api/v1/document/stream route</a></p>";
+echo "<p><a href='?simulate=1' style='font-size: 16px; font-weight: bold; color: blue;'>👉 Click here to simulate internal /api/v1/document/load route</a></p>";
 
 echo "<h3>System Error Logs</h3>";
 $logDir = STORAGE_PATH . '/logs';

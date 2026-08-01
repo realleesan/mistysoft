@@ -101,7 +101,7 @@ class App
 
     // Document routes
     $this->router->get('/document', 'DocumentController@index');
-    $this->router->get('/api/v1/document/stream', 'DocumentController@stream');
+    $this->router->get('/api/v1/document/load', 'DocumentController@stream');
     $this->router->post('/api/v1/document/report-violation', 'DocumentController@reportViolation');
 
 
