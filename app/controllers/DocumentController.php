@@ -98,10 +98,16 @@ class DocumentController extends Controller
       exit;
     }
 
+    // Clear any active output buffers to prevent memory issues or headers mismatch
+    while (ob_get_level() > 0) {
+      ob_end_clean();
+    }
+
     // Stream the file with security headers
     header('Content-Type: application/pdf');
     header('Content-Disposition: inline; filename="' . $fileName . '"');
-    header('Content-Length: ' . filesize($filePath));
+    // Disabled Content-Length to prevent hangs due to server-side compression mismatch
+    // header('Content-Length: ' . filesize($filePath));
     header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
     header('Pragma: no-cache');
     header('Expires: 0');
