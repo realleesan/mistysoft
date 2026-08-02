@@ -948,7 +948,7 @@
   <script>
     (function() {
       // Configuration & State
-      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'email', 'cr'];
+      const DOC_ORDER = ['proposal', 'srs', 'qna', 'ats', 'payment', 'contract', 'config', 'email', 'cr'];
       let currentDoc = 'proposal';
       let pdfDoc = null;
       let pageNum = 1;
