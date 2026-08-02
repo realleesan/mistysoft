@@ -95,16 +95,38 @@ class DocumentController extends Controller
     }
 
     $docKey = $_GET['doc'] ?? '';
-    if (!array_key_exists($docKey, self::OBFUSCATED_DOCS)) {
+    if (!array_key_exists($docKey, self::DOCS)) {
       http_response_code(404);
       echo 'Document not found.';
       exit;
     }
 
-    $obfuscatedName = self::OBFUSCATED_DOCS[$docKey];
-    $url = '/public/assets/docs/' . $obfuscatedName;
+    $fileName = self::DOCS[$docKey];
+    $filePath = APP_PATH . '/views/document/' . $fileName;
 
-    json_response(['url' => $url]);
+    if (!file_exists($filePath)) {
+      http_response_code(404);
+      echo 'Document file not found.';
+      exit;
+    }
+
+    // Clear any active output buffers to prevent memory issues or headers mismatch
+    while (ob_get_level() > 0) {
+      ob_end_clean();
+    }
+
+    // Stream the file with security headers
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: inline; filename="' . $fileName . '"');
+    header('Content-Length: ' . filesize($filePath));
+    header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+    header('X-Frame-Options: SAMEORIGIN');
+    header('X-Content-Type-Options: nosniff');
+
+    readfile($filePath);
+    exit;
   }
 
   public function reportViolation(): void

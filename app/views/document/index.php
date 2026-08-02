@@ -1171,21 +1171,7 @@
         // Call secure API stream
         const url = `/api/v1/document/load?doc=${docKey}`;
 
-        fetch(url)
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then(json => {
-            if (thisSessionId !== renderSessionId) return;
-            if (!json || !json.url) {
-              throw new Error('Invalid JSON response or missing PDF URL.');
-            }
-
-            return pdfjsLib.getDocument({ url: json.url, withCredentials: true }).promise;
-          })
+        pdfjsLib.getDocument({ url: url, withCredentials: true }).promise
           .then(function(pdf) {
             if (!pdf || thisSessionId !== renderSessionId) return;
 
