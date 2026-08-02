@@ -1204,9 +1204,8 @@
               if (thisSessionId !== renderSessionId) return;
               loading.style.display = 'none';
               pagesContainer.style.display = 'flex';
-              
-              // Start rendering pages sequentially
-              renderPages(thisSessionId, 1);
+              // Start rendering pages instantly with lazy loading
+              renderPages(thisSessionId);
             }, 300);
 
           }).catch(function(error) {
@@ -1216,68 +1215,63 @@
           });
       }
 
-      // 5. Recursive Page Rendering using Images
-      function renderPages(sessionId, num) {
+      // 5. Parallel Page Rendering using Native Browser Lazy Loading
+      function renderPages(sessionId) {
         if (sessionId !== renderSessionId) return;
-        if (num > pdfDoc.numPages) {
-          updateNavigationButtons();
-          return;
-        }
-
-        // Create page wrapper card
-        const pageWrapper = document.createElement('div');
-        pageWrapper.className = 'canvas-card';
-        pageWrapper.id = `page-wrapper-${num}`;
-        pageWrapper.style.position = 'relative';
-        pageWrapper.style.marginBottom = '24px';
-        pageWrapper.style.display = 'flex';
-        pageWrapper.style.justifyContent = 'center';
-        pageWrapper.style.alignItems = 'center';
-
-        const pageImg = document.createElement('img');
-        pageImg.id = `page-img-${num}`;
-        pageImg.style.display = 'block';
-        pageImg.style.width = (840 * scale) + 'px';
-        pageImg.style.height = 'auto';
-        pageImg.style.pointerEvents = 'none'; // Lock mouse events
-        pageWrapper.appendChild(pageImg);
-
-        // Watermark Overlay
-        const pageWatermark = document.createElement('div');
-        pageWatermark.className = 'watermark-overlay';
         
-        const ip = <?= json_encode($ip) ?>;
-        const text = `CONFIDENTIAL // MISTYSOFT // IP: ${ip}`;
-        for (let i = 0; i < 24; i++) {
-          const div = document.createElement('div');
-          div.className = 'watermark-text';
-          div.textContent = text;
-          pageWatermark.appendChild(div);
-        }
-        pageWrapper.appendChild(pageWatermark);
-
-        pagesContainer.appendChild(pageWrapper);
-        
-        // Observe page for updating Page number in toolbar
-        pageObserver.observe(pageWrapper);
-
-        // Set image src and load recursively
-        pageImg.onload = function() {
-          if (sessionId !== renderSessionId) return;
-          pageWatermark.style.width = pageImg.clientWidth + 'px';
-          pageWatermark.style.height = pageImg.clientHeight + 'px';
+        pdfDoc.pages.forEach((pageUrl, index) => {
+          const num = index + 1;
           
-          // Next page render
-          renderPages(sessionId, num + 1);
-        };
+          // Create page wrapper card
+          const pageWrapper = document.createElement('div');
+          pageWrapper.className = 'canvas-card';
+          pageWrapper.id = `page-wrapper-${num}`;
+          pageWrapper.style.position = 'relative';
+          pageWrapper.style.marginBottom = '24px';
+          pageWrapper.style.display = 'flex';
+          pageWrapper.style.justifyContent = 'center';
+          pageWrapper.style.alignItems = 'center';
 
-        pageImg.onerror = function() {
-          if (sessionId !== renderSessionId) return;
-          renderPages(sessionId, num + 1);
-        };
+          const pageImg = document.createElement('img');
+          pageImg.id = `page-img-${num}`;
+          pageImg.style.display = 'block';
+          pageImg.style.width = (840 * scale) + 'px';
+          pageImg.style.height = 'auto';
+          pageImg.style.pointerEvents = 'none'; // Lock mouse events
+          pageImg.setAttribute('loading', 'lazy'); // Native Lazy Loading
+          pageWrapper.appendChild(pageImg);
 
-        // Trigger load
-        pageImg.src = window.location.origin + pdfDoc.pages[num - 1];
+          // Watermark Overlay
+          const pageWatermark = document.createElement('div');
+          pageWatermark.className = 'watermark-overlay';
+          
+          const ip = <?= json_encode($ip) ?>;
+          const text = `CONFIDENTIAL // MISTYSOFT // IP: ${ip}`;
+          for (let i = 0; i < 24; i++) {
+            const div = document.createElement('div');
+            div.className = 'watermark-text';
+            div.textContent = text;
+            pageWatermark.appendChild(div);
+          }
+          pageWrapper.appendChild(pageWatermark);
+
+          pagesContainer.appendChild(pageWrapper);
+          
+          // Observe page for updating Page number in toolbar
+          pageObserver.observe(pageWrapper);
+
+          // Set image src and adjust watermark dimensions on load
+          pageImg.onload = function() {
+            if (sessionId !== renderSessionId) return;
+            pageWatermark.style.width = pageImg.clientWidth + 'px';
+            pageWatermark.style.height = pageImg.clientHeight + 'px';
+          };
+
+          // Trigger load
+          pageImg.src = window.location.origin + pageUrl;
+        });
+
+        updateNavigationButtons();
       }
 
       function reRenderDocument() {
@@ -1288,7 +1282,7 @@
         pagesContainer.innerHTML = '';
         pagesContainer.style.display = 'flex';
         
-        renderPages(thisSessionId, 1);
+        renderPages(thisSessionId);
       }
 
       function updateNavigationButtons() {
