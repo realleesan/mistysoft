@@ -1180,18 +1180,11 @@
           })
           .then(json => {
             if (thisSessionId !== renderSessionId) return;
-            if (!json || !json.pdf) {
-              throw new Error('Invalid JSON response or missing PDF data.');
+            if (!json || !json.url) {
+              throw new Error('Invalid JSON response or missing PDF URL.');
             }
 
-            const binaryString = window.atob(json.pdf.trim());
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-              bytes[i] = binaryString.charCodeAt(i);
-            }
-
-            return pdfjsLib.getDocument({ data: bytes }).promise;
+            return pdfjsLib.getDocument({ url: json.url, withCredentials: true }).promise;
           })
           .then(function(pdf) {
             if (!pdf || thisSessionId !== renderSessionId) return;

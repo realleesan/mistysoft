@@ -16,6 +16,18 @@ class DocumentController extends Controller
     'cr' => 'CR_LMS_KOREAN_MS_B_2026_V1.0.pdf',
   ];
 
+  private const OBFUSCATED_DOCS = [
+    'proposal' => 'proposal_8be4f2a9.dat',
+    'srs' => 'srs_7d2f9c1e.dat',
+    'qna' => 'qna_3a8b7e2d.dat',
+    'ats' => 'ats_9c1f2e8d.dat',
+    'payment' => 'payment_5b3e6c9a.dat',
+    'contract' => 'contract_4d8f1e7a.dat',
+    'config' => 'config_6e2a9b3f.dat',
+    'email' => 'email_2d7f8c1b.dat',
+    'cr' => 'cr_9f4e2d8a.dat',
+  ];
+
   private function getBlockedDevicesPath(): string
   {
     return STORAGE_PATH . '/logs/blocked_devices.json';
@@ -83,35 +95,16 @@ class DocumentController extends Controller
     }
 
     $docKey = $_GET['doc'] ?? '';
-    if (!array_key_exists($docKey, self::DOCS)) {
+    if (!array_key_exists($docKey, self::OBFUSCATED_DOCS)) {
       http_response_code(404);
       echo 'Document not found.';
       exit;
     }
 
-    $fileName = self::DOCS[$docKey];
-    $filePath = APP_PATH . '/views/document/' . $fileName;
+    $obfuscatedName = self::OBFUSCATED_DOCS[$docKey];
+    $url = '/public/assets/docs/' . $obfuscatedName;
 
-    if (!file_exists($filePath)) {
-      http_response_code(404);
-      echo 'Document file not found.';
-      exit;
-    }
-
-    // Clear any active output buffers to prevent memory issues or headers mismatch
-    while (ob_get_level() > 0) {
-      ob_end_clean();
-    }
-
-    $content = @file_get_contents($filePath);
-    if ($content === false) {
-      json_response(['error' => 'Failed to read document file'], 500);
-    }
-
-    $base64 = base64_encode($content);
-
-    // Stream the base64 content inside a standard JSON response to bypass security blocks on raw/plain binaries
-    json_response(['pdf' => $base64]);
+    json_response(['url' => $url]);
   }
 
   public function reportViolation(): void
