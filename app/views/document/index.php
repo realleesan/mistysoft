@@ -1287,7 +1287,7 @@
           };
 
           // Set source data path to be picked up by lazy loader
-          pageImg.setAttribute('data-src', window.location.origin + pageUrl);
+          pageImg.setAttribute('data-src', pageUrl);
         });
 
         updateNavigationButtons();

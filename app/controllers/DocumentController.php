@@ -116,7 +116,7 @@ class DocumentController extends Controller
     $count = $pageCounts[$docKey];
     $pages = [];
     for ($i = 1; $i <= $count; $i++) {
-      $pages[] = "/public/assets/docs/{$docKey}/page_{$i}.png";
+      $pages[] = "https://cdn.jsdelivr.net/gh/realleesan/mistysoft@master/public/assets/docs/{$docKey}/page_{$i}.png";
     }
 
     header('Content-Type: application/json');
