@@ -1223,9 +1223,9 @@
             });
 
           }).catch(function(error) {
-            console.error(error);
-            loadingTitle.textContent = 'Lỗi tải tài liệu. Vui lòng kiểm tra quyền truy cập.';
-            showToast('Lỗi: Không thể tải file tài liệu từ server.');
+            console.error('PDF load failure:', error);
+            loadingTitle.textContent = 'Lỗi tải tài liệu: ' + error.message;
+            showToast('Lỗi tải: ' + error.message);
           });
       }
 
