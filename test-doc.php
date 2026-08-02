@@ -170,14 +170,38 @@ if (!is_dir($docDir)) {
     echo "</ul>";
 }
 
-// Test DocumentController::DOCS mapping
-echo "<h3>Checking DocumentController::DOCS Mapping</h3>";
+// Check files in public/assets/docs/
+$publicDocsDir = BASE_PATH . '/public/assets/docs';
+echo "<h3>Checking Directory: $publicDocsDir</h3>";
+if (!is_dir($publicDocsDir)) {
+    echo "<p style='color: red;'>Directory public/assets/docs does not exist!</p>";
+} else {
+    echo "<p style='color: green;'>Directory public/assets/docs exists.</p>";
+    $files = @scandir($publicDocsDir);
+    if ($files === false) {
+        echo "<p style='color: red;'>Failed to scan directory public/assets/docs</p>";
+    } else {
+        echo "<ul>";
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') continue;
+            $path = $publicDocsDir . '/' . $file;
+            $size = @filesize($path);
+            $readable = is_readable($path) ? "Yes" : "No";
+            echo "<li><strong>$file</strong> - Size: $size bytes, Readable: $readable</li>";
+        }
+        echo "</ul>";
+    }
+}
+
+
+// Test DocumentController::OBFUSCATED_DOCS mapping
+echo "<h3>Checking DocumentController::OBFUSCATED_DOCS Mapping</h3>";
 try {
     $reflection = new ReflectionClass('DocumentController');
-    $docs = $reflection->getConstant('DOCS');
+    $docs = $reflection->getConstant('OBFUSCATED_DOCS');
     echo "<ul>";
     foreach ($docs as $key => $fileName) {
-        $path = $docDir . '/' . $fileName;
+        $path = $publicDocsDir . '/' . $fileName;
         if (file_exists($path)) {
             echo "<li><span style='color: green;'>✔</span> <strong>$key</strong> maps to <strong>$fileName</strong> (Exists, Size: " . filesize($path) . " bytes)</li>";
         } else {
@@ -186,7 +210,7 @@ try {
     }
     echo "</ul>";
 } catch (\Throwable $e) {
-    echo "<p style='color: red;'>Failed to check constant DOCS: " . $e->getMessage() . "</p>";
+    echo "<p style='color: red;'>Failed to check constant OBFUSCATED_DOCS: " . $e->getMessage() . "</p>";
 }
 
 // Check for BOM/leading whitespace in all included PHP files
