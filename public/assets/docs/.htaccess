@@ -1,3 +1,0 @@
-RewriteEngine On
-RewriteCond %{HTTP_REFERER} !^https://(www\.)?mistydev\.id\.vn [NC]
-RewriteRule \.(dat|pdf)$ - [F]
