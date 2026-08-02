@@ -971,7 +971,7 @@
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
       // 1. Page Intersection Observer to sync toolbar page number during scroll
-      const pageObserver = new IntersectionObserver(function(entries) {
+      const pageNumberObserver = new IntersectionObserver(function(entries) {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const pageId = entry.target.id;
@@ -986,6 +986,25 @@
       }, {
         root: viewport,
         threshold: 0.25 // Trigger when 25% of the page is in view
+      });
+
+      // 1b. Lazy Load Observer to prevent connection spikes on Free hosting
+      const lazyLoadObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const pageWrapper = entry.target;
+            const pageImg = pageWrapper.querySelector('img');
+            if (pageImg && pageImg.getAttribute('data-src')) {
+              pageImg.src = pageImg.getAttribute('data-src');
+              pageImg.removeAttribute('data-src');
+            }
+            lazyLoadObserver.unobserve(pageWrapper); // Load only once
+          }
+        });
+      }, {
+        root: viewport,
+        rootMargin: '600px 0px 600px 0px', // Pre-load pages 600px ahead for seamless scroll
+        threshold: 0.01
       });
 
       // 2. Toast Alert System
@@ -1215,7 +1234,7 @@
           });
       }
 
-      // 5. Parallel Page Rendering using Native Browser Lazy Loading
+      // 5. Parallel Page Rendering using JS-based Lazy Loading
       function renderPages(sessionId) {
         if (sessionId !== renderSessionId) return;
         
@@ -1238,7 +1257,6 @@
           pageImg.style.width = (840 * scale) + 'px';
           pageImg.style.height = 'auto';
           pageImg.style.pointerEvents = 'none'; // Lock mouse events
-          pageImg.setAttribute('loading', 'lazy'); // Native Lazy Loading
           pageWrapper.appendChild(pageImg);
 
           // Watermark Overlay
@@ -1257,18 +1275,19 @@
 
           pagesContainer.appendChild(pageWrapper);
           
-          // Observe page for updating Page number in toolbar
-          pageObserver.observe(pageWrapper);
+          // Observe page for updating Page number in toolbar & lazy loading
+          pageNumberObserver.observe(pageWrapper);
+          lazyLoadObserver.observe(pageWrapper);
 
-          // Set image src and adjust watermark dimensions on load
+          // Adjust watermark dimensions on load
           pageImg.onload = function() {
             if (sessionId !== renderSessionId) return;
             pageWatermark.style.width = pageImg.clientWidth + 'px';
             pageWatermark.style.height = pageImg.clientHeight + 'px';
           };
 
-          // Trigger load
-          pageImg.src = window.location.origin + pageUrl;
+          // Set source data path to be picked up by lazy loader
+          pageImg.setAttribute('data-src', window.location.origin + pageUrl);
         });
 
         updateNavigationButtons();
