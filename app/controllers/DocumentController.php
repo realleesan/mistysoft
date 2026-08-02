@@ -90,42 +90,41 @@ class DocumentController extends Controller
   {
     if ($this->isBlocked()) {
       http_response_code(403);
-      echo 'Access Denied: Screen capture violation active.';
+      echo json_encode(['error' => 'Access Denied: Screen capture violation active.']);
       exit;
     }
 
     $docKey = $_GET['doc'] ?? '';
-    if (!array_key_exists($docKey, self::DOCS)) {
+    $pageCounts = [
+      'proposal' => 11,
+      'srs' => 23,
+      'qna' => 15,
+      'ats' => 12,
+      'payment' => 5,
+      'contract' => 42,
+      'config' => 10,
+      'email' => 4,
+      'cr' => 6,
+    ];
+
+    if (!array_key_exists($docKey, $pageCounts)) {
       http_response_code(404);
-      echo 'Document not found.';
+      echo json_encode(['error' => 'Document not found.']);
       exit;
     }
 
-    $fileName = self::DOCS[$docKey];
-    $filePath = APP_PATH . '/views/document/' . $fileName;
-
-    if (!file_exists($filePath)) {
-      http_response_code(404);
-      echo 'Document file not found.';
-      exit;
+    $count = $pageCounts[$docKey];
+    $pages = [];
+    for ($i = 1; $i <= $count; $i++) {
+      $pages[] = "/public/assets/docs/{$docKey}/page_{$i}.png";
     }
 
-    // Clear any active output buffers to prevent memory issues or headers mismatch
-    while (ob_get_level() > 0) {
-      ob_end_clean();
-    }
-
-    // Stream the file with security headers
-    header('Content-Type: application/pdf');
-    header('Content-Disposition: inline; filename="' . $fileName . '"');
-    header('Content-Length: ' . filesize($filePath));
-    header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0');
-    header('Pragma: no-cache');
-    header('Expires: 0');
-    header('X-Frame-Options: SAMEORIGIN');
-    header('X-Content-Type-Options: nosniff');
-
-    readfile($filePath);
+    header('Content-Type: application/json');
+    echo json_encode([
+      'key' => $docKey,
+      'pages' => $pages,
+      'pageCount' => $count
+    ]);
     exit;
   }
 

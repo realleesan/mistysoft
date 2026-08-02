@@ -1152,7 +1152,7 @@
       });
 
 
-      // 4. PDF.js Document Loader
+      // 4. Image-based Document Loader
       function loadDocument(docKey) {
         currentDoc = docKey;
         pageNum = 1;
@@ -1168,47 +1168,55 @@
         
         updateNavigationButtons();
         
-        // Call secure API stream
+        // Call secure API load
         const url = `/api/v1/document/load?doc=${docKey}`;
 
-        pdfjsLib.getDocument({ url: url, withCredentials: true }).promise
-          .then(function(pdf) {
-            if (!pdf || thisSessionId !== renderSessionId) return;
+        fetch(url)
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then(json => {
+            if (thisSessionId !== renderSessionId) return;
+            if (!json || !json.pages || json.pages.length === 0) {
+              throw new Error('Invalid response or missing page images.');
+            }
 
-            pdfDoc = pdf;
-            pageCountSpan.textContent = pdf.numPages;
+            pdfDoc = {
+              numPages: json.pageCount,
+              pages: json.pages
+            };
+
+            pageCountSpan.textContent = pdfDoc.numPages;
             pageNumInput.value = pageNum;
             
             // Calculate scale to fit width on initial load
-            pdf.getPage(1).then(function(page) {
+            const viewportWidth = viewport.clientWidth - 48; // padding
+            scale = viewportWidth / 840;
+            scale = Math.min(Math.max(scale, 0.45), 1.8);
+            zoomPercentSpan.textContent = Math.round(scale * 100) + '%';
+            
+            // Fade out loading
+            loading.style.opacity = '0';
+            setTimeout(() => {
               if (thisSessionId !== renderSessionId) return;
+              loading.style.display = 'none';
+              pagesContainer.style.display = 'flex';
               
-              const viewportData = page.getViewport({ scale: 1.0 });
-              const viewportWidth = viewport.clientWidth - 48; // padding
-              scale = viewportWidth / viewportData.width;
-              scale = Math.min(Math.max(scale, 0.45), 1.8);
-              zoomPercentSpan.textContent = Math.round(scale * 100) + '%';
-              
-              // Fade out loading
-              loading.style.opacity = '0';
-              setTimeout(() => {
-                if (thisSessionId !== renderSessionId) return;
-                loading.style.display = 'none';
-                pagesContainer.style.display = 'flex';
-                
-                // Start rendering pages sequentially
-                renderPages(thisSessionId, 1);
-              }, 300);
-            });
+              // Start rendering pages sequentially
+              renderPages(thisSessionId, 1);
+            }, 300);
 
           }).catch(function(error) {
-            console.error('PDF load failure:', error);
+            console.error('Document load failure:', error);
             loadingTitle.textContent = 'Lỗi tải tài liệu: ' + error.message;
             showToast('Lỗi tải: ' + error.message);
           });
       }
 
-      // 5. Recursive Page Rendering
+      // 5. Recursive Page Rendering using Images
       function renderPages(sessionId, num) {
         if (sessionId !== renderSessionId) return;
         if (num > pdfDoc.numPages) {
@@ -1226,11 +1234,13 @@
         pageWrapper.style.justifyContent = 'center';
         pageWrapper.style.alignItems = 'center';
 
-        const pageCanvas = document.createElement('canvas');
-        pageCanvas.id = `page-canvas-${num}`;
-        pageCanvas.style.display = 'block';
-        pageCanvas.style.pointerEvents = 'none'; // Lock mouse events
-        pageWrapper.appendChild(pageCanvas);
+        const pageImg = document.createElement('img');
+        pageImg.id = `page-img-${num}`;
+        pageImg.style.display = 'block';
+        pageImg.style.width = (840 * scale) + 'px';
+        pageImg.style.height = 'auto';
+        pageImg.style.pointerEvents = 'none'; // Lock mouse events
+        pageWrapper.appendChild(pageImg);
 
         // Watermark Overlay
         const pageWatermark = document.createElement('div');
@@ -1251,35 +1261,23 @@
         // Observe page for updating Page number in toolbar
         pageObserver.observe(pageWrapper);
 
-        // Fetch & render page
-        pdfDoc.getPage(num).then(function(page) {
+        // Set image src and load recursively
+        pageImg.onload = function() {
           if (sessionId !== renderSessionId) return;
-
-          const viewportData = page.getViewport({ scale: scale });
-          const pixelRatio = window.devicePixelRatio || 1;
+          pageWatermark.style.width = pageImg.clientWidth + 'px';
+          pageWatermark.style.height = pageImg.clientHeight + 'px';
           
-          pageCanvas.width = viewportData.width * pixelRatio;
-          pageCanvas.height = viewportData.height * pixelRatio;
-          pageCanvas.style.width = viewportData.width + 'px';
-          pageCanvas.style.height = viewportData.height + 'px';
+          // Next page render
+          renderPages(sessionId, num + 1);
+        };
 
-          const ctx = pageCanvas.getContext('2d');
-          const renderContext = {
-            canvasContext: ctx,
-            viewport: viewportData,
-            transform: [pixelRatio, 0, 0, pixelRatio, 0, 0]
-          };
+        pageImg.onerror = function() {
+          if (sessionId !== renderSessionId) return;
+          renderPages(sessionId, num + 1);
+        };
 
-          page.render(renderContext).promise.then(function() {
-            if (sessionId !== renderSessionId) return;
-
-            pageWatermark.style.width = viewportData.width + 'px';
-            pageWatermark.style.height = viewportData.height + 'px';
-
-            // Next page render
-            renderPages(sessionId, num + 1);
-          });
-        });
+        // Trigger load
+        pageImg.src = window.location.origin + pdfDoc.pages[num - 1];
       }
 
       function reRenderDocument() {
@@ -1361,14 +1359,11 @@
       // Auto Fit scale function
       function autoFitScale() {
         if (!pdfDoc) return;
-        pdfDoc.getPage(pageNum).then(function(page) {
-          const viewportData = page.getViewport({ scale: 1.0 });
-          const viewportWidth = viewport.clientWidth - 40;
-          scale = viewportWidth / viewportData.width;
-          scale = Math.min(Math.max(scale, 0.45), 2.5);
-          zoomPercentSpan.textContent = Math.round(scale * 100) + '%';
-          reRenderDocument();
-        });
+        const viewportWidth = viewport.clientWidth - 40;
+        scale = viewportWidth / 840;
+        scale = Math.min(Math.max(scale, 0.45), 2.5);
+        zoomPercentSpan.textContent = Math.round(scale * 100) + '%';
+        reRenderDocument();
       }
 
       document.getElementById('zoom-fit').addEventListener('click', autoFitScale);
