@@ -10,7 +10,7 @@ class HomeController extends Controller
     }
 
     $content = ContentBlock::getActiveBlocks();
-    $projects = Project::getFeatured(6);
+    $projects = Project::getAll();
     $pricing = PricingPlan::getActive();
 
     $this->view('home/index', [
@@ -33,7 +33,7 @@ class HomeController extends Controller
   public function ecosystem(): void
   {
     $content = ContentBlock::getActiveBlocks();
-    $projects = Project::getFeatured(6);
+    $projects = Project::getAll();
 
     $this->view('ecosystem/index', [
       'title' => 'Digital Solutions Ecosystem - MistySoft',

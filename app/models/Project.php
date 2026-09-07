@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 class Project extends BaseModel
 {
-  public static function getFeatured(int $limit = 6): array
+  public static function getFeatured(int $limit = 50): array
   {
     $stmt = self::db()->prepare(
-      'SELECT id, title, slug, short_description, logo, website_url
+      'SELECT id, title, slug, short_description, logo, images, website_url
        FROM projects
        WHERE is_active = 1
        ORDER BY sort_order ASC, id DESC
@@ -15,19 +15,27 @@ class Project extends BaseModel
     $stmt->bindValue(1, $limit, PDO::PARAM_INT);
     $stmt->execute();
 
-    return $stmt->fetchAll();
+    $rows = $stmt->fetchAll();
+    foreach ($rows as &$row) {
+      $row['images'] = self::decodeJson($row['images'] ?? null) ?? [];
+    }
+    return $rows;
   }
 
   public static function getAll(): array
   {
     $stmt = self::db()->query(
-      'SELECT id, title, slug, short_description, logo, website_url
+      'SELECT id, title, slug, short_description, logo, images, website_url
        FROM projects
        WHERE is_active = 1
        ORDER BY sort_order ASC, id DESC'
     );
 
-    return $stmt->fetchAll();
+    $rows = $stmt->fetchAll();
+    foreach ($rows as &$row) {
+      $row['images'] = self::decodeJson($row['images'] ?? null) ?? [];
+    }
+    return $rows;
   }
 
   public static function findBySlug(string $slug): ?array
