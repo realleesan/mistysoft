@@ -206,12 +206,36 @@ function url(string $path = ''): string
   return $base . ($path === '/' ? '' : $path);
 }
 
-function asset(string $path): string
+function asset(string $path, ?string $version = null): string
 {
-  if (preg_match('#^(https?:)?//#i', $path) || str_starts_with($path, 'data:')) {
+  if (empty($path)) {
+    return '';
+  }
+
+  if (str_starts_with($path, 'data:')) {
     return $path;
   }
-  return url($path);
+
+  $isExternal = preg_match('#^(https?:)?//#i', $path);
+
+  if ($version === null && !$isExternal) {
+    $cleanPath = explode('?', $path, 2)[0];
+    $localPath = dirname(__DIR__) . '/public/' . ltrim($cleanPath, '/');
+    if (file_exists($localPath)) {
+      $version = (string) filemtime($localPath);
+    } else {
+      $version = (string) config('app.version', '1.0.1');
+    }
+  }
+
+  $url = $isExternal ? $path : url($path);
+
+  if ($version !== null && $version !== '') {
+    $separator = str_contains($url, '?') ? '&' : '?';
+    $url .= $separator . 'v=' . $version;
+  }
+
+  return $url;
 }
 
 function csrf_token(): string

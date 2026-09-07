@@ -5,6 +5,7 @@ declare(strict_types=1);
 // Note: putenv() may be disabled on some shared hosting, so we only use $_ENV
 return [
   'name' => 'MistySoft',
+  'version' => $_ENV['APP_VERSION'] ?? '1.0.1',
   'base_url' => $_ENV['APP_URL'] ?? '',
   'env' => $_ENV['APP_ENV'] ?? 'production',
   'fb_pixel_id' => $_ENV['FB_PIXEL_ID'] ?? '',

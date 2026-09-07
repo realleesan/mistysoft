@@ -13,13 +13,9 @@ $portfolio = $content['portfolio']['content'] ?? [];
     <div class="portfolio-carousel">
       <div class="portfolio-carousel__track">
         <?php foreach ($projects as $project): ?>
-          <?php 
-            $projectImages = $project['images'] ?? [];
-            $projectImage = !empty($projectImages) && is_array($projectImages) ? $projectImages[0] : $project['logo'];
-          ?>
           <a href="<?= url('/projects/' . $project['slug']) ?>" class="portfolio-item">
             <div class="portfolio-item__image">
-              <img src="<?= asset($projectImage) ?>" alt="<?= e($project['title']) ?>" loading="lazy">
+              <img src="<?= asset($project['logo'] ?? '') ?>" alt="<?= e($project['title']) ?>" loading="lazy">
               <div class="portfolio-item__overlay">
                 <span class="portfolio-item__name"><?= e($project['title']) ?></span>
               </div>

@@ -6,7 +6,7 @@ class Project extends BaseModel
   public static function getFeatured(int $limit = 50): array
   {
     $stmt = self::db()->prepare(
-      'SELECT id, title, slug, short_description, logo, images, website_url
+      'SELECT id, title, slug, short_description, logo, website_url
        FROM projects
        WHERE is_active = 1
        ORDER BY sort_order ASC, id DESC
@@ -15,27 +15,19 @@ class Project extends BaseModel
     $stmt->bindValue(1, $limit, PDO::PARAM_INT);
     $stmt->execute();
 
-    $rows = $stmt->fetchAll();
-    foreach ($rows as &$row) {
-      $row['images'] = self::decodeJson($row['images'] ?? null) ?? [];
-    }
-    return $rows;
+    return $stmt->fetchAll();
   }
 
   public static function getAll(): array
   {
     $stmt = self::db()->query(
-      'SELECT id, title, slug, short_description, logo, images, website_url
+      'SELECT id, title, slug, short_description, logo, website_url
        FROM projects
        WHERE is_active = 1
        ORDER BY sort_order ASC, id DESC'
     );
 
-    $rows = $stmt->fetchAll();
-    foreach ($rows as &$row) {
-      $row['images'] = self::decodeJson($row['images'] ?? null) ?? [];
-    }
-    return $rows;
+    return $stmt->fetchAll();
   }
 
   public static function findBySlug(string $slug): ?array
@@ -50,7 +42,6 @@ class Project extends BaseModel
       return null;
     }
 
-    $row['images'] = self::decodeJson($row['images'] ?? null) ?? [];
     return $row;
   }
 
@@ -63,9 +54,6 @@ class Project extends BaseModel
       'short_description' => $project['short_description'],
       'description' => $project['description'] ?? null,
       'logo' => $project['logo'],
-      'images' => is_array($project['images'] ?? null)
-        ? $project['images']
-        : (self::decodeJson($project['images'] ?? null) ?? []),
       'website_url' => $project['website_url'],
     ];
   }
