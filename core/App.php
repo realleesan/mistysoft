@@ -198,6 +198,9 @@ function e(?string $value): string
 
 function url(string $path = ''): string
 {
+  if ($path !== '' && (preg_match('#^(https?:)?//#i', $path) || str_starts_with($path, 'data:'))) {
+    return $path;
+  }
   $base = rtrim(config('app.base_url', ''), '/');
   $path = '/' . ltrim($path, '/');
   return $base . ($path === '/' ? '' : $path);
@@ -205,6 +208,9 @@ function url(string $path = ''): string
 
 function asset(string $path): string
 {
+  if (preg_match('#^(https?:)?//#i', $path) || str_starts_with($path, 'data:')) {
+    return $path;
+  }
   return url($path);
 }
 
