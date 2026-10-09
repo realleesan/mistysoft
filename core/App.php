@@ -6,6 +6,7 @@ require_once CORE_PATH . '/Database.php';
 require_once CORE_PATH . '/Router.php';
 require_once CORE_PATH . '/Controller.php';
 require_once CORE_PATH . '/View.php';
+require_once CORE_PATH . '/Cache.php';
 
 // Auto-load app classes
 spl_autoload_register(function (string $class): void {
@@ -82,6 +83,9 @@ class App
   {
     if (session_status() === PHP_SESSION_NONE) {
       session_start();
+      if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+      }
     }
   }
 
@@ -98,6 +102,7 @@ class App
     $this->router->get('/api/v1/projects', 'ProjectController@apiIndex');
     $this->router->get('/api/v1/projects/{slug}', 'ProjectController@apiShow');
     $this->router->post('/api/v1/contact', 'ContactController@apiStore');
+    $this->router->get('/api/v1/cache/clear', 'HomeController@clearCache');
 
     // Document routes
     $this->router->get('/document', 'DocumentController@index');

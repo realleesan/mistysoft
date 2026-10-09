@@ -42,4 +42,13 @@ class HomeController extends Controller
       'projects' => $projects,
     ], 'main');
   }
+
+  public function clearCache(): void
+  {
+    Cache::flush();
+    json_response([
+      'success' => true,
+      'message' => 'Cache cleared successfully',
+    ]);
+  }
 }

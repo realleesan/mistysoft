@@ -5,21 +5,23 @@ class PricingPlan extends BaseModel
 {
   public static function getActive(): array
   {
-    $stmt = self::db()->query(
-      'SELECT id, name, price, features, is_featured, is_custom
-       FROM pricing_plans
-       WHERE is_active = 1
-       ORDER BY sort_order ASC'
-    );
+    return Cache::remember('pricing_plans_active', 86400, function () {
+      $stmt = self::db()->query(
+        'SELECT id, name, price, features, is_featured, is_custom
+         FROM pricing_plans
+         WHERE is_active = 1
+         ORDER BY sort_order ASC'
+      );
 
-    $plans = [];
-    foreach ($stmt->fetchAll() as $row) {
-      $row['features'] = self::decodeJson($row['features']) ?? [];
-      $row['price'] = $row['price'] !== null ? (float) $row['price'] : null;
-      $plans[] = $row;
-    }
+      $plans = [];
+      foreach ($stmt->fetchAll() as $row) {
+        $row['features'] = self::decodeJson($row['features']) ?? [];
+        $row['price'] = $row['price'] !== null ? (float) $row['price'] : null;
+        $plans[] = $row;
+      }
 
-    return $plans;
+      return $plans;
+    });
   }
 
   public static function formatPrice(?float $price): string
