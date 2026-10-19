@@ -165,6 +165,6 @@
   <script src="<?= asset('/js/tracking.js') ?>" defer></script>
 
   <!-- OmniChannel Webchat Widget -->
-  <script src="https://cdn.jsdelivr.net/gh/realleesan/OmniChannel@main/public/widget/webchat.js"></script>
+  <script src="https://omnichannel-gateway.onrender.com/public/widget/webchat.js"></script>
 </body>
 </html>
