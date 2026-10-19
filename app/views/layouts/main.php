@@ -155,10 +155,6 @@
     </div>
   </footer>
 
-  <a href="<?= e(config('app.zalo_url')) ?>" class="float-btn float-btn--zalo" target="_blank" rel="noopener" aria-label="Chat Zalo">
-    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2C6.48 2 2 6.25 2 11.5c0 2.89 1.45 5.46 3.72 7.13L5 22l3.78-1.96C9.73 20.65 10.84 21 12 21c5.52 0 10-4.25 10-9.5S17.52 2 12 2z"/></svg>
-  </a>
-
   <script>
     window.MISTY_CONFIG = {
       fbPixelId: <?= json_encode(config('app.fb_pixel_id', '')) ?>,
@@ -167,5 +163,8 @@
   </script>
   <script src="<?= asset('/js/main.js') ?>" defer></script>
   <script src="<?= asset('/js/tracking.js') ?>" defer></script>
+
+  <!-- OmniChannel Webchat Widget -->
+  <script src="https://omnichannel.gt.tc/public/widget/webchat.js"></script>
 </body>
 </html>
